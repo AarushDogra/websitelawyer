@@ -1,1 +1,626 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Lawyer Up - Your Legal Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: white;
+            background: #000 url('file.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+        .auth-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .auth-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            max-width: 160px;
+            box-sizing: border-box;
+        }
+        .btn-login {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        .btn-login:hover {
+            background: white;
+            color: #000000;
+        }
+        .btn-signup {
+            background: white;
+            color: #000000;
+        }
+        .btn-signup:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+        .btn-talk {
+            background-color: #007bff;
+            color: white;
+            font-weight: 600;
+            max-width: 330px;
+            width: 100%;
+        }
+        .btn-talk:hover {
+            background-color: #0056b3;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .hero {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 70vh;
+            margin-bottom: 1.5rem;
+        }
+        .chatbox {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 700px;
+            min-height: 420px;
+            height: 60vh;
+            margin: 0 auto;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .chatbox h1, .chatbox p {
+            text-align: center;
+        }
+        .chatbox h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            color: white;
+        }
+        .chatbox p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            color: rgba(255,255,255,0.9);
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 1.5rem auto;
+            background: #3a3a3a;
+            border-radius: 40px;
+            border: 2px solid #aaa;
+            padding: 0.2rem;
+        }
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 1.3rem;
+            color: #eaeaea;
+            padding: 1rem 1.5rem;
+            border-radius: 40px 0 0 40px;
+            outline: none;
+        }
+        .search-input::placeholder {
+            color: #bdbdbd;
+            opacity: 1;
+            font-size: 1.25rem;
+        }
+        .search-btn {
+            background: white;
+            color: #000;
+            border: none;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: -8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.09);
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 2rem;
+        }
+        .search-btn:hover {
+            background: #eaeaea;
+        }
+        .quick-questions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        .question-card {
+            background: rgba(255,255,255,0.13);
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            color: white;
+            border: none;
+            font-size: 1rem;
+        }
+        .question-card:hover {
+            background: rgba(255,255,255,0.2);
+            color: #000000;
+        }
+        .response-section {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 15px 35px rgba(255,255,255,0.13);
+            display: none;
+        }
+        .response-section.active { display: block; }
+        .ai-response h3 {color: white; margin-bottom: 1rem; font-size: 1.5rem;}
+        .ai-response p {color: #eaeaea;}
+        .quick-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(3, auto);
+            gap: 1.5rem 2rem;
+            margin: 1.5rem 0;
+        }
+        .option-card {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 2rem 1.8rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-weight: 600;
+            font-size: 1.3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+            min-height: 140px;
+        }
+        .option-card i {
+            font-size: 2.5rem;
+            margin-bottom: 0.7rem;
+            color: inherit;
+        }
+        .option-card h4 {
+            margin: 0.5rem 0 0.3rem 0;
+            font-size: 1.4rem;
+        }
+        .option-card p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .option-card.bail-info {
+            background-color: red;
+            border: 1px solid #cc0000;
+            font-size: 1.4rem;
+            padding: 2rem;
+            font-weight: 700;
+            transform: scale(1.05);
+        }
+        .option-card.bail-info:hover {
+            transform: scale(1.1);
+        }
+        .option-card.green {
+            background-color: #006400;
+            color: white;
+            border: 1px solid #004b00;
+        }
+        .option-card.yellow {
+            background-color: #bfae00;
+            color: #333;
+            border: 1px solid #8f7a00;
+        }
+        .option-card.red {
+            background-color: #b22222;
+            color: white;
+            border: 1px solid #7a1616;
+        }
+        .option-card.green:hover,
+        .option-card.yellow:hover,
+        .option-card.red:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+        .lawyers-section { margin: 2rem 0;}
+        .lawyers-section h3 {font-size: 1.1rem; margin-bottom: 0.6rem; color: white;}
+        .lawyers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+        }
+        .lawyer-card {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lawyer-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: rgba(255,255,255,0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+        .rating { color: #ffd700; margin: 0.5rem 0;}
+        .ipc-section {
+            margin: 2rem 0;
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid white;
+        }
+        .ipc-section h3 { font-size: 1.1rem; margin-bottom: 0.8rem;}
+        .ipc-details strong { color: white;}
+        .ipc-details p { margin-bottom: 0.7rem;}
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.93);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 94%;
+            backdrop-filter: blur(10px);
+        }
+        .modal h3 { margin-bottom: 1rem; color: white;}
+        .form-group { margin-bottom: 1rem;}
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        .form-group input::placeholder { color: rgba(255, 255, 255, 0.7);}
+        .close-modal {
+            position: absolute;
+            top: 10px; right: 15px;
+            background: none; border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-balance-scale"></i> Lawyer Up
+        </div>
+        <div class="auth-buttons">
+            <div class="auth-row">
+                <button class="btn btn-login" onclick="openModal('loginModal')">Login</button>
+                <button class="btn btn-signup" onclick="openModal('signupModal')">Sign Up</button>
+            </div>
+            <button class="btn btn-talk" onclick="talkToLawyer()">Talk To Lawyer</button>
+        </div>
+    </nav>
+    <div class="main-container">
+        <!-- Large Chatbox Section -->
+        <section class="hero">
+            <div class="chatbox">
+                <h1>Lawyer Up</h1>
+                <p>Your instant AI-powered legal assistant</p>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Describe your legal issue...">
+                    <button class="search-btn" onclick="handleSearch()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="quick-questions">
+                    <div class="question-card" onclick="showResponse('theft')">I've been accused of theft</div>
+                    <div class="question-card" onclick="showResponse('assault')">Assault charges against me</div>
+                    <div class="question-card" onclick="showResponse('fraud')">Fraud case consultation</div>
+                </div>
+            </div>
+        </section>
+        <!-- Theft Response Section -->
+        <div id="response-theft" class="response-section">
+            <div class="ai-response">
+                <h3><i class="fas fa-robot"></i> AI Legal Analysis</h3>
+                <p>Based on your theft accusation, here's what you need to know immediately:</p>
+            </div>
+            <div class="quick-options">
+                <div class="option-card bail-info"><i class="fas fa-gavel"></i><h4>Bail Information</h4><p>₹5,000 - ₹50,000 typical range</p></div>
+                <div class="option-card green"><i class="fas fa-clock"></i><h4>Trial Timeline</h4><p>6-18 months average</p></div>
+                <div class="option-card yellow"><i class="fas fa-exclamation-triangle"></i><h4>Potential Punishment</h4><p>Fine + 1-3 years imprisonment</p></div>
+                <div class="option-card red"><i class="fas fa-list"></i><h4>First Steps</h4><p>Contact lawyer immediately</p></div>
+                <div class="option-card green"><i class="fas fa-user-shield"></i><h4>Crime Type</h4><p>Non-bailable offense</p></div>
+                <div class="option-card yellow"><i class="fas fa-chart-line"></i><h4>Severity Level</h4><p>Moderate to High</p></div>
+            </div>
+            <div class="lawyers-section">
+                <h3><i class="fas fa-users"></i> Top Criminal Lawyers</h3>
+                <div class="lawyers-grid">
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Rajesh Kumar</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i> 4.9/5
+                        </div>
+                        <p>25 years experience • 95% success rate</p>
+                        <p>Specializes in theft cases</p>
+                    </div>
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Priya Sharma</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i> 4.8/5
+                        </div>
+                        <p>18 years experience • 92% success rate</p>
+                        <p>Criminal defense expert</p>
+                    </div>
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Amit Singh</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="far fa-star"></i> 4.7/5
+                        </div>
+                        <p>15 years experience • 89% success rate</p>
+                        <p>Property crime specialist</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ipc-section">
+                <h3><i class="fas fa-book-open"></i> Relevant IPC Sections</h3>
+                <div class="ipc-details">
+                    <p><strong>Section 378 - Theft:</strong> Whoever, intending to take dishonestly any movable property out of the possession of any person without that person's consent, moves that property in order to such taking, is said to commit theft.</p>
+                    <p><strong>Section 379 - Punishment for theft:</strong> Whoever commits theft shall be punished with imprisonment of either description for a term which may extend to three years, or with fine, or with both.</p>
+                    <p><strong>Section 380 - Theft in dwelling house:</strong> Enhanced punishment up to 7 years imprisonment.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Assault Response Section -->
+        <div id="response-assault" class="response-section">
+            <div class="ai-response">
+                <h3><i class="fas fa-robot"></i> AI Legal Analysis</h3>
+                <p>Assault charges are serious. Here's your immediate action plan:</p>
+            </div>
+            <div class="quick-options">
+                <div class="option-card bail-info"><i class="fas fa-gavel"></i><h4>Bail Information</h4><p>₹10,000 - ₹1,00,000 range</p></div>
+                <div class="option-card green"><i class="fas fa-clock"></i><h4>Trial Timeline</h4><p>8-24 months average</p></div>
+                <div class="option-card yellow"><i class="fas fa-exclamation-triangle"></i><h4>Potential Punishment</h4><p>2-7 years imprisonment</p></div>
+                <div class="option-card red"><i class="fas fa-list"></i><h4>First Steps</h4><p>Get bail application ready</p></div>
+                <div class="option-card green"><i class="fas fa-user-shield"></i><h4>Crime Type</h4><p>Non-bailable offense</p></div>
+                <div class="option-card yellow"><i class="fas fa-chart-line"></i><h4>Severity Level</h4><p>High</p></div>
+            </div>
+            <div class="lawyers-section">
+                <h3><i class="fas fa-users"></i> Top Criminal Lawyers</h3>
+                <div class="lawyers-grid">
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Rajesh Kumar</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i> 4.9/5
+                        </div>
+                        <p>25 years experience • 95% success rate</p>
+                        <p>Specializes in theft cases</p>
+                    </div>
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Priya Sharma</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i> 4.8/5
+                        </div>
+                        <p>18 years experience • 92% success rate</p>
+                        <p>Criminal defense expert</p>
+                    </div>
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Amit Singh</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="far fa-star"></i> 4.7/5
+                        </div>
+                        <p>15 years experience • 89% success rate</p>
+                        <p>Property crime specialist</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ipc-section">
+                <h3><i class="fas fa-book-open"></i> Relevant IPC Sections</h3>
+                <div class="ipc-details">
+                    <p><strong>Section 351 - Assault:</strong> Whoever makes any gesture, or any preparation intending or knowing it to be likely that such gesture or preparation will cause any person present to apprehend that he who makes that gesture or preparation is about to use criminal force to that person, is said to commit an assault.</p>
+                    <p><strong>Section 352 - Punishment for assault:</strong> Whoever assaults or uses criminal force to any person otherwise than on grave and sudden provocation given by that person, shall be punished with imprisonment of either description for a term which may extend to three months, or with fine which may extend to five hundred rupees, or with both.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Fraud Response Section -->
+        <div id="response-fraud" class="response-section">
+            <div class="ai-response">
+                <h3><i class="fas fa-robot"></i> AI Legal Analysis</h3>
+                <p>Fraud cases require specialized handling. Here's what you need to know:</p>
+            </div>
+            <div class="quick-options">
+                <div class="option-card bail-info"><i class="fas fa-gavel"></i><h4>Bail Information</h4><p>₹50,000 - ₹5,00,000 range</p></div>
+                <div class="option-card green"><i class="fas fa-clock"></i><h4>Trial Timeline</h4><p>12-36 months average</p></div>
+                <div class="option-card yellow"><i class="fas fa-exclamation-triangle"></i><h4>Potential Punishment</h4><p>Up to 7 years imprisonment</p></div>
+                <div class="option-card red"><i class="fas fa-list"></i><h4>First Steps</h4><p>Gather all documents</p></div>
+                <div class="option-card green"><i class="fas fa-user-shield"></i><h4>Crime Type</h4><p>Non-bailable/Bailable</p></div>
+                <div class="option-card yellow"><i class="fas fa-chart-line"></i><h4>Severity Level</h4><p>Very High</p></div>
+            </div>
+            <div class="lawyers-section">
+                <h3><i class="fas fa-users"></i> Top Criminal Lawyers</h3>
+                <div class="lawyers-grid">
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Rajesh Kumar</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i> 4.9/5
+                        </div>
+                        <p>25 years experience • 95% success rate</p>
+                        <p>Specializes in theft cases</p>
+                    </div>
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Priya Sharma</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i> 4.8/5
+                        </div>
+                        <p>18 years experience • 92% success rate</p>
+                        <p>Criminal defense expert</p>
+                    </div>
+                    <div class="lawyer-card">
+                        <div class="lawyer-img"><i class="fas fa-user-tie"></i></div>
+                        <h4>Adv. Amit Singh</h4>
+                        <div class="rating">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i><i class="far fa-star"></i> 4.7/5
+                        </div>
+                        <p>15 years experience • 89% success rate</p>
+                        <p>Property crime specialist</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ipc-section">
+                <h3><i class="fas fa-book-open"></i> Relevant IPC Sections</h3>
+                <div class="ipc-details">
+                    <p><strong>Section 415 - Cheating:</strong> Whoever, by deceiving any person, fraudulently or dishonestly induces the person so deceived to deliver any property to any person, or to consent that any person shall retain any property, or intentionally induces the person so deceived to do or omit to do anything which he would not do or omit if he were not so deceived, and which act or omission causes or is likely to cause damage or harm to that person in body, mind, reputation or property, is said to "cheat".</p>
+                    <p><strong>Section 420 - Cheating and dishonestly inducing delivery of property:</strong> Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person, or to make, alter or destroy the whole or any part of a valuable security, or anything which is signed or sealed, and which is capable of being converted into a valuable security, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Modals for login/signup -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="closeModal('loginModal')">&times;</button>
+                <h3>Login to Lawyer Up</h3>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" />
+                </div>
+                <button class="btn btn-signup" style="width: 100%;">Login</button>
+            </div>
+        </div>
+        <div id="signupModal" class="modal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="closeModal('signupModal')">&times;</button>
+                <h3>Sign Up for Lawyer Up</h3>
+                <div class="form-group">
+                    <input type="text" placeholder="Full Name" />
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" />
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="Password" />
+                </div>
+                <button class="btn btn-signup" style="width: 100%;">Sign Up</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showResponse(type) {
+            const responses = document.querySelectorAll('.response-section');
+            responses.forEach(response => response.classList.remove('active'));
+            const selectedResponse = document.getElementById('response-' + type);
+            if (selectedResponse) {
+                selectedResponse.classList.add('active');
+                selectedResponse.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        function handleSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.trim().toLowerCase();
+            if (query && query.includes('theft')) showResponse('theft');
+            else if (query && query.includes('assault')) showResponse('assault');
+            else if (query && query.includes('fraud')) showResponse('fraud');
+            searchInput.value = '';
+        }
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        function talkToLawyer() {
+            alert("Feature coming soon - connecting to a lawyer!");
+        }
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+    </script>
+</body>
+</html>
